@@ -1,0 +1,38 @@
+.background {
+    height: 100vh;
+    width: 100%;
+    cursor: pointer;
+    transition: all .5s ease;
+    background-clip: padding-box;
+    background-size: cover;
+    background-position: center;
+}
+
+.option {
+    transition: all .5s ease;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* background-color: rgba(255, 255, 255, 0.5); */
+    height: 100vh;
+    width: 100%;
+    color: white;
+    /* color: black; */
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    font-size: large;
+}
+
+.option .content {
+    display: block;
+    text-align: center;
+}
+
+.option:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.background:hover {
+    transform: scale(1.1);
+}

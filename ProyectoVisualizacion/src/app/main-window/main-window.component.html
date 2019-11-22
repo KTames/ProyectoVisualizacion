@@ -1,1 +1,3 @@
-<p>main-window works!</p>
+<div id="wrapper" class="row m-0 p-0">
+    <app-main-window-widget *ngFor="let option of buttons" text={{option.title}} link={{option.link}} svg={{option.svg}} redirect={{option.redirect}} class="{{formsClass}} p-0 m-0"></app-main-window-widget>
+</div>

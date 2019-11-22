@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { NavigationCancel,
         Event,
         NavigationEnd,
@@ -13,7 +13,6 @@ import { NavigationCancel,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular8tutorial';
   constructor(private loadingBar: SlimLoadingBarService, private router: Router) {
     this.router.events.subscribe(   (event: Event) => {
       this.navigationInterceptor(event);

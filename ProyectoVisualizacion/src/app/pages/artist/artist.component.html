@@ -1,0 +1,137 @@
+<div class="wrapper m-0">
+    <div class="row m-0 p-0">
+        <div class="col-3 bg-light p-4" style="height: 100vh">
+            <h6 [routerLink]="['/']" routerLinkActive="router-link-active"
+                style="cursor: pointer; display: flex; align-content: center; align-items: center;" class="mb-4"><img
+                    class="img-rounded" src="assets/svg/back.svg"
+                    [ngStyle]="{'height.px': 20, 'width.px': 20}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    style="line-height: 10px; align-self: center;">Volver a página inicial</span></h6>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Buscar">
+            </div>
+            <hr>
+            <h4 class="images-title">Cuadro de búsqueda</h4>
+            <div id="searchDiv" class="row overflow" [ngStyle]="{'max-height': maxHeight + 'px'}">
+                <div *ngIf="artists.length == 0;else emptyArtists">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ngb-tabset [justify]="'center'">
+                                <ngb-tab title="Follows" [ngStyle]="{'background-color': '#f8f9fa'}">
+                                    <ng-template ngbTabContent>
+                                        <div class="row following" id="follows">
+                                            <div class="col-md-6 ml-auto mr-auto">
+                                                <ul class="list-unstyled follows">
+                                                    <li>
+                                                        <div class="row">
+                                                            <div class="col-md-2 col-sm-2 ml-auto mr-auto">
+                                                                <img src="./assets/img/faces/clem-onojeghuo-2.jpg"
+                                                                    alt="Circle Image"
+                                                                    class="img-circle img-no-padding img-responsive">
+                                                            </div>
+                                                            <div class="col-md-7 col-sm-4 ml-auto">
+                                                                <h6>Flume<br /><small>Musical Producer</small></h6>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-2 ml-auto mr-auto">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="" checked="">
+                                                                        <span class="form-check-sign"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <hr />
+                                                    <li>
+                                                        <div class="row">
+                                                            <div class="col-md-2 col-sm-2 ml-auto mr-auto">
+                                                                <img src="./assets/img/faces/ayo-ogunseinde-2.jpg"
+                                                                    alt="Circle Image"
+                                                                    class="img-circle img-no-padding img-responsive">
+                                                            </div>
+                                                            <div class="col-md-7 col-sm-4 ml-auto">
+                                                                <h6>Banks<br /><small>Singer</small></h6>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-2 ml-auto mr-auto">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="" checked="">
+                                                                        <span class="form-check-sign"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </ngb-tab>
+                            </ngb-tabset>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #emptyArtists>
+                    No hay artistas
+                </ng-template>
+            </div>
+        </div>
+        <div class="col-9 m-0 p-4 bg-gradient-secondary" style="overflow: scroll; max-height: 100vh;">
+            <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem optio illum suscipit corporis nemo
+                    magni aliquam praesentium debitis placeat totam sit molestias nisi, beatae unde consectetur saepe?
+                    Velit, omnis architecto!</span><span>Alias dolores magnam eius repellendus repudiandae incidunt
+                    aspernatur veniam deleniti iusto, accusantium inventore voluptas! Dolorem esse, repellat tenetur in
+                    sed officiis odit minus adipisci similique incidunt libero porro voluptates. Explicabo?</span></p>
+            <p><span>Vero sit atque perferendis ipsam et voluptates officiis, magnam incidunt dolor repellat maxime,
+                    asperiores excepturi magni rerum hic, eaque error? Error modi molestiae maxime blanditiis adipisci
+                    excepturi ipsa distinctio labore!</span><span>Magni optio, eos saepe ducimus labore eveniet adipisci
+                    tenetur nesciunt incidunt doloribus deserunt rerum quo maiores accusamus, nobis cumque, obcaecati
+                    commodi cum cupiditate consequuntur non et similique! Quaerat, asperiores necessitatibus.</span></p>
+            <p><span>Omnis corporis voluptas temporibus atque ad maiores obcaecati quia ipsum eius repellat, iste
+                    ratione excepturi! Id voluptatibus perferendis unde porro sunt consectetur ut illo! Dicta possimus
+                    consectetur repellat similique nostrum.</span><span>Voluptatum, molestiae amet reprehenderit libero
+                    omnis recusandae consectetur illo necessitatibus quam odit sed aliquam modi quod sunt veritatis
+                    dolorem eum ab aspernatur quidem deserunt? Ad consectetur ut vero eum neque!</span></p>
+            <p><span>Deserunt inventore facere voluptate, expedita ducimus rem. Quibusdam amet asperiores voluptate
+                    quaerat commodi vero dignissimos, odio esse eligendi omnis tenetur explicabo ex maxime incidunt
+                    iusto? Necessitatibus incidunt sit voluptate nemo!</span><span>Dolore saepe blanditiis ex sunt autem
+                    asperiores atque non, odit excepturi tempore eligendi aut voluptates quas ut cum fugiat. Modi porro
+                    et corporis illum debitis delectus nihil perferendis obcaecati ratione!</span></p>
+            <p><span>Aliquid amet earum ullam reprehenderit cum quisquam, deserunt optio modi quo repellendus ab
+                    assumenda, itaque adipisci dicta porro quasi a sequi accusantium quibusdam exercitationem deleniti?
+                    Pariatur minus consequuntur ratione atque!</span><span>A repellat, blanditiis earum deleniti illo,
+                    illum magnam eius, dolore commodi cumque nihil corporis adipisci rem harum deserunt repudiandae cum
+                    impedit sed accusamus natus. Placeat expedita minus ex excepturi quasi?</span></p>
+            <p><span>Laudantium magnam aliquid aliquam porro perspiciatis quibusdam id, necessitatibus laboriosam
+                    incidunt voluptatibus iure doloremque corporis aut pariatur temporibus tempore mollitia! Perferendis
+                    dolorum accusamus excepturi nesciunt, ea recusandae quisquam voluptates nam.</span><span>Saepe iusto
+                    adipisci cupiditate expedita? Necessitatibus hic modi voluptates. Corporis placeat optio facere. Hic
+                    asperiores aliquid velit ipsam enim itaque quo recusandae esse libero sit! Nulla ab ratione incidunt
+                    laborum.</span></p>
+            <p><span>Accusantium nemo minima voluptas eaque autem dolorem earum optio, esse iste reprehenderit eligendi
+                    magni expedita rerum hic commodi deleniti impedit eum incidunt quos cumque laborum ipsum praesentium
+                    quibusdam. Tenetur, veritatis.</span><span>Officiis hic, qui a unde suscipit eaque quia amet, sit
+                    non voluptate dignissimos alias quas eum labore dicta modi. Sunt dolores magnam voluptas blanditiis
+                    facere vero odit, temporibus soluta laborum.</span></p>
+            <p><span>Officiis aperiam sapiente dolores. Dolorem voluptatibus alias eos impedit. Officiis officia dolorum
+                    tenetur corporis atque numquam reprehenderit ab voluptate exercitationem voluptates, quasi magni
+                    iusto, repudiandae corrupti rem soluta? Vero, numquam.</span><span>Itaque maiores, quidem molestiae
+                    perspiciatis repellendus nesciunt modi dolore! Ut repudiandae laborum voluptatem quaerat eum amet
+                    alias perspiciatis asperiores molestiae obcaecati minima nam unde dolores ipsum dignissimos ipsam,
+                    accusamus soluta!</span></p>
+            <p><span>Magnam doloribus, harum vel tenetur eveniet ad. Consectetur, nostrum itaque molestiae quis iure,
+                    eaque dignissimos excepturi nihil, repudiandae labore quia sunt! Quos doloremque earum rem aut
+                    ipsam, inventore ipsa fugit!</span><span>Aliquid voluptatem deleniti nisi consequatur quaerat
+                    aspernatur inventore et iure itaque temporibus officia quos natus distinctio doloribus corrupti
+                    suscipit expedita architecto, a, error eum, eos ducimus magnam doloremque. Deserunt, nobis.</span>
+            </p>
+            <p><span>Ut, accusamus quasi modi, quis quibusdam consequuntur at laboriosam eum, nemo deserunt vitae
+                    debitis doloribus sed expedita corporis sequi iusto ducimus autem labore. Omnis debitis, voluptas
+                    odio repellendus soluta praesentium.</span><span>Aliquid quo voluptate, iure suscipit ab est magnam
+                    nihil quidem animi voluptatum? Ullam iste perspiciatis magni blanditiis fugiat dicta at ipsam
+                    necessitatibus, molestiae eius odio, non, doloremque iure doloribus architecto.</span></p>
+        </div>
+    </div>
+</div>

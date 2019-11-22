@@ -1,0 +1,29 @@
+.img-gen {
+    display: flex;
+    width: 150px;
+    height: 100px;
+    align-content: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 15px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checked {
+    transition: all .2s ease;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    width: 25px;
+    height: 25px;
+}
+
+.checked img {
+    width: 100%;
+    height: 100%;
+}

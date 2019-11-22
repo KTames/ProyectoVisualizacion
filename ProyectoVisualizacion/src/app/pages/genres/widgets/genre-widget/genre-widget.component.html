@@ -1,0 +1,8 @@
+<div class="wrapper p-0 m-0" (click)="trigger()" style="cursor: pointer;">
+    <div class="img-gen text-white" [ngStyle]="{'background': 'linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url(' + linkToBackground + ')', 'background-size': 'cover'}">
+        <h4 style="font-weight: 700;">{{name}}</h4>
+        <div class="checked" [ngStyle]="{'opacity': active ? '1' : '0'}">
+            <img src="assets/svg/checked.svg">
+        </div>
+    </div>
+</div>

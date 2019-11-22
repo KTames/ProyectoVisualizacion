@@ -1,0 +1,24 @@
+<div class="wrapper m-0 p-0">
+    <div class="row m-0 p-0">
+        <div class="col-3 bg-light p-4" style="height: 100vh">
+            <h6 [routerLink]="['/']" routerLinkActive="router-link-active"
+                style="cursor: pointer; display: flex; align-content: center; align-items: center;" class="mb-4">
+                <img class="img-rounded" src="assets/svg/back.svg" [ngStyle]="{'height.px': 20, 'width.px': 20}">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="line-height: 10px; align-self: center;">Volver a página
+                    inicial</span></h6>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Buscar" (keyup)="filterOptions($event)">
+            </div>
+            <hr>
+            <h4 class="images-title">Selecciona los géneros</h4>
+            <div id="searchDiv" class="row overflow" [ngStyle]="{'max-height': maxHeight + 'px'}">
+                <div class="col-lg-6 col-md-12 form-group container" *ngFor="let genre of showGenres">
+                    <app-genre-widget [name]="genre.ref.name" [active]="genre.ref.active" [link]="genre.ref.link"
+                        (voted)="vote($event, genre.ref)">
+                    </app-genre-widget>
+                </div>
+                <h5 *ngIf="showGenres.length == 0" style="text-align: center; width: 100%;">No hay coincidencias</h5>
+            </div>
+        </div>
+    </div>
+</div>

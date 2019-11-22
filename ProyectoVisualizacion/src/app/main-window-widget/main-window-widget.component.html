@@ -1,0 +1,10 @@
+<div #bgDiv class="background" [ngStyle]="bgDivStyles">
+    <div class="option" [routerLink]="[redirectLink]" routerLinkActive="router-link-active" >
+        <div class="content">
+            <h4 class="title text-white">{{text}}</h4>
+            <br>
+            <br>
+            <img [src]="svgLink" [ngStyle]="{'height.px': 60, 'width.px': 60}">
+        </div>
+    </div>
+</div>

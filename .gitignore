@@ -1,1 +1,6 @@
 ProyectoVisualizacion/node_modules/
+NodeServer/node_modules
+paper-kit-2-angular-master
+.vscode
+.DS_Store
+NodeServer/web-api-auth-examples
