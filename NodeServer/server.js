@@ -17,7 +17,7 @@ const client_id = '9d7aa1f7b8e54ab99f56b250648de459'; // Your client id
 const client_secret = 'cd4b0c86fa87436e9e7419666d701e8d'; // Your secret
 const refresh_token = 'AQAr18lBX9wdwzXfur4fdFprQmnONWZqaInuJsyYxtLYo_GIRa6yliqHPAqBsTSizhndslYLBKv0nnSscWa8wrCZRqkrTjC65qq4xxgefoN0WXGt0WuDKnJGXZJZBPGhEGY';
 
-let access_token = 'BQD8jBcHAu_2yqSMjOoPqQIYWlpp7wvC8im0msWbfDTrnJXDtZw7lRjgauOXaDPsnYQwDEUmwUdOfP_Cry6MXk72USa6NQuPflgBp8u64XirzDki0JEvbAW_pha3SwLqX83nKZekmEaRMq6oNVWfp0FKiAhJv0gK1_ZYHQEvOTXZHxOB5w';
+let access_token = 'BQD4M5qrFVN-4DGeq2E4UY9AmKasEfP3oZp9HJ40Myqfn7Am5_PaUb3shvSzAOI-r_qY1Xk-DpsH5wg3o8hGLaCXTDpP97crm0Xihzg18coigas2URFUHmlN3mDnCvMVLUw6rRL7JPDedj_tMsBAtTm0IlTfSlWhgERCjQhfZDp25guThA';
 
 app = express();
 app.use(cors()).use(cookieParser());
@@ -65,7 +65,8 @@ function getNewAccessToken(then) {
     request.post(authOptions, function (error, response, body) {
         if (!error && response.statusCode === 200) {
             access_token = body.access_token;
-            then(body.access_token);
+            console.log(access_token);
+            then(access_token);
         }
     });
 }

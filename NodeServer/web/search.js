@@ -37,7 +37,7 @@ function msToTime(duration) {
 module.exports = function (request) {
     return {
         search: function (params, access_token, onSuccess, onError) {
-            var options = {
+            const options = {
                 url: 'https://api.spotify.com/v1/search',
                 qs: {
                     'q': params,
@@ -58,13 +58,34 @@ module.exports = function (request) {
                     onError(response == undefined || response == null ? error : response.body);
             });
         },
-        searchArtist: async function(artist, access_token, onSuccess, onError) {
-            var options = {
+        searchArtist: function (artist, access_token, onSuccess, onError) {
+            const options = {
                 url: 'https://api.spotify.com/v1/search',
                 qs: {
                     'q': artist,
                     'type': 'artist',
                     'limit': '30'
+                },
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                },
+                json: true,
+            };
+            request.get(options, function (error, response, body) {
+                if (!error && response.statusCode === 200)
+                    onSuccess(body);
+                else
+                    onError(response.body);
+            });
+        },
+
+        searchArtistSongs: function (artistId, access_token, onSuccess, onError) {
+            const options = {
+                url: 'https://api.spotify.com/v1/artists/' + artistId + '/top-tracks',
+                qs: {
+                    country: 'ES'
                 },
                 headers: {
                     'Accept': 'application/json',
