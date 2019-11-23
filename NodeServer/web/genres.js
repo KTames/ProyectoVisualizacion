@@ -4,7 +4,7 @@ async function loadSingleArtist(artist, search, reload, token) {
             const onSuccess = function (data) {
                 resolve(data);
             };
-
+            // console.log("ARtist: " + artist);
             search.searchArtist(artist, token, onSuccess, function (error) {
                 if (error.error.status == 401) {
                     reload(function (new_token) {
@@ -19,6 +19,8 @@ async function loadSingleArtist(artist, search, reload, token) {
         });
 
         const response = await artists.catch(console.log);
+        // console.log("response");
+        // console.log(response);
         if (response.artists.total == 0)
             res(0);
         else {
@@ -34,6 +36,7 @@ async function getSongs(artist, search, reload, token) {
     if (artist == undefined) return [];
     return new Promise(async (res, rej) => {
         const songs = new Promise((resolve, reject) => {
+            // console.log(artist);
             const onSuccess = function (data) {
                 resolve(data);
             };
@@ -58,8 +61,8 @@ async function getSongs(artist, search, reload, token) {
         // console.log(response.tracks);
         for (song of response.tracks) {
             const newObj = {};
-            newObj['name'] = song.name;
-            newObj['popularity'] = song.popularity;
+            newObj['nombre'] = song.name;
+            newObj['size'] = song.popularity;
             newSongs.push(newObj);
         }
         res(newSongs);
@@ -87,7 +90,7 @@ module.exports = function (axios, cheerio, puppeteer) {
                                 const text = $(this).find('a > bdi').text();
                                 const href = $(this).find('a').attr('href');
                                 artistsArray.push({
-                                    text: text,
+                                    nombre: text,
                                     link: href,
                                 });
                             });
@@ -97,15 +100,16 @@ module.exports = function (axios, cheerio, puppeteer) {
                     });
                     const indexesToDrop = [];
                     let genderPopularity = 0;
+
                     for ([index, artist] of artistsArray.entries()) {
-                        const singleArtistData = await loadSingleArtist(artist.text, search, reloadToken, access_token).catch(console.log);
+                        const singleArtistData = await loadSingleArtist(artist.nombre, search, reloadToken, access_token).catch(console.log);
                         artist['popularity'] = singleArtistData.popularity;
                         if (singleArtistData.popularity == undefined)
                             indexesToDrop.push(index);
                         else {
                             genderPopularity += singleArtistData.popularity;
                             const singleArtistSongs = await getSongs(singleArtistData.id, search, reloadToken, access_token).catch(console.log);
-                            artist['songs'] = singleArtistSongs;
+                            artist['children'] = singleArtistSongs;
                         }
                     }
 
@@ -117,8 +121,9 @@ module.exports = function (axios, cheerio, puppeteer) {
 
 
                     res.send({
+                        nombre: genre,
                         popularity: genderPopularity,
-                        artists: artistsArray
+                        children: artistsArray
                         // artists: []
                     });
                 })

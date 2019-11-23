@@ -1,3 +1,10 @@
 .nav-link.active:after {
     border-bottom-color: #f8f9fa!important;
 }
+
+.miImagen {
+    width: 100px;
+    height: 100px;
+    background-color: black;
+    border-radius: 10px;;
+}

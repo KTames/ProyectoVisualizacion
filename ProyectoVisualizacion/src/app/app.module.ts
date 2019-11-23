@@ -12,6 +12,7 @@ import { GenreWidgetComponent } from './pages/genres/widgets/genre-widget/genre-
 import { GenresComponent } from './pages/genres/genres.component';
 import { FormsModule } from '@angular/forms';
 import { MusicComponent } from './pages/music/music.component';
+import { NodeService } from './services/node.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { MusicComponent } from './pages/music/music.component';
     NgbModule,
     FormsModule
   ],
-  providers: [],
+  providers: [ NodeService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
