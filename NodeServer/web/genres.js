@@ -4,8 +4,8 @@ async function loadSingleArtist(artist, search, reload, token) {
             const onSuccess = function (data) {
                 resolve(data);
             };
-            // console.log("ARtist: " + artist);
-            search.searchArtist(artist, token, onSuccess, function (error) {
+            
+            search.searchArtist(artist, token(), onSuccess, function (error) {
                 if (error.error.status == 401) {
                     reload(function (new_token) {
                         search.searchArtist(artist, new_token, onSuccess, function (error) {
@@ -19,8 +19,6 @@ async function loadSingleArtist(artist, search, reload, token) {
         });
 
         const response = await artists.catch(console.log);
-        // console.log("response");
-        // console.log(response);
         if (response.artists.total == 0)
             res(0);
         else {
@@ -36,12 +34,11 @@ async function getSongs(artist, search, reload, token) {
     if (artist == undefined) return [];
     return new Promise(async (res, rej) => {
         const songs = new Promise((resolve, reject) => {
-            // console.log(artist);
             const onSuccess = function (data) {
                 resolve(data);
             };
 
-            search.searchArtistSongs(artist, token, onSuccess, function (error) {
+            search.searchArtistSongs(artist, token(), onSuccess, function (error) {
                 if (error.error.status == 401) {
                     reload(function (new_token) {
                         search.searchArtist(artist, new_token, onSuccess, function (error) {

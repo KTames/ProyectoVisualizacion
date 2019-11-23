@@ -17,7 +17,7 @@ const client_id = '9d7aa1f7b8e54ab99f56b250648de459'; // Your client id
 const client_secret = 'cd4b0c86fa87436e9e7419666d701e8d'; // Your secret
 const refresh_token = 'AQAr18lBX9wdwzXfur4fdFprQmnONWZqaInuJsyYxtLYo_GIRa6yliqHPAqBsTSizhndslYLBKv0nnSscWa8wrCZRqkrTjC65qq4xxgefoN0WXGt0WuDKnJGXZJZBPGhEGY';
 
-let access_token = 'BQDQiZLZ0n5GLBU01U3Y1kwRmvhQEmJ06k49-1tFDZ0yIB-kUa-couZnbI6gv9_rLHnTHjkgm8nfN8JHKwaEI9nzcpGaRoi4WoKLVbtVh7toNU-n56MPeChkvpCeL1RvWtqWy6qKP2Dt1qxKQQJOsNKheQ061_sJeGu3I7IJJOk9-R1EQQ';
+let access_token = 'BQDCf-w_HOL-ca-wZamYdbdgCw39l-1dOzhxOa7S5o0LuuJlLjS_CAWYk7ap0xxiAYNT-hNA2-54CzHa0HcI2nF7vvwDEdogjO7NRD4jfRojpOzJx0fUZP4-LJrAz9eqnLTv5Ju8qvvIPrEL_aMCvp0nyjU20nbgxhQw0Px2JafC8YZJiQ';
 
 app = express();
 app.use(cors()).use(cookieParser());
@@ -43,12 +43,20 @@ app.get('/search', function (req, res) {
 });
 
 app.get('/genre', function (req, res) {
-    genres.getGenre(req.query.q, search, getNewAccessToken, access_token, res, res.send);
+    genres.getGenre(req.query.q, search, getNewAccessToken, getToken, res, res.send);
 });
 
 app.get('/static/search', function (req, res) {
     res.send(static_songs.getStatic());
 });
+
+app.get('/artist', function(req, res) {
+    
+});
+
+function getToken() {
+    return access_token;
+}
 
 function getNewAccessToken(then) {
     var authOptions = {
