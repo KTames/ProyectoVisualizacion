@@ -13,6 +13,8 @@ import { GenresComponent } from './pages/genres/genres.component';
 import { FormsModule } from '@angular/forms';
 import { MusicComponent } from './pages/music/music.component';
 import { NodeService } from './services/node.service';
+import { HttpClientModule} from '@angular/common/http'
+import { ModalComponent } from './pages/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -22,14 +24,16 @@ import { NodeService } from './services/node.service';
     ArtistComponent,
     GenreWidgetComponent,
     GenresComponent,
-    MusicComponent
+    MusicComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SlimLoadingBarModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [ NodeService ],
   bootstrap: [AppComponent]

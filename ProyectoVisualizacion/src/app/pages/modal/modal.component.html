@@ -1,0 +1,32 @@
+<div class="custom-modal" [ngStyle]="{ display: show ? 'block' : 'none' }">
+  <div class="container">
+    <div class="card card-plain">
+      <div class="card__image-container">
+        <img class="card__image" src="{{ image }}" alt="Image not found" />
+      </div>
+
+      <div class="card__content">
+        <hr />
+        <h4 class="card__title"><b>{{ name }}</b></h4>
+        <br>
+        <table class="card__table">
+            <tr>
+                <td><h4 class="card__title">Artista: </h4></td>
+                <td><h5 class="card__title">{{ artists }}</h5></td>
+            </tr>
+            <tr>
+                <td><h4 class="card__title">Popularidad: </h4></td>
+                <td><h4 class="card__title">{{ popularity }}</h4></td>
+            </tr>
+            <tr>
+                <td><h4 class="card__title">Duración: </h4></td>
+                <td><h4 class="card__title">{{ duration }}</h4></td>
+            </tr>
+        </table>
+        
+        
+        
+      </div>
+    </div>
+  </div>
+</div>

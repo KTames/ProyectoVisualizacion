@@ -1,3 +1,4 @@
+ 
 <div class="wrapper m-0">
     <div class="row m-0 p-0">
         <div class="col-3 bg-light p-4" style="height: 100vh">
@@ -7,44 +8,16 @@
                     [ngStyle]="{'height.px': 20, 'width.px': 20}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                     style="line-height: 10px; align-self: center;">Volver a página inicial</span></h6>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Buscar">
+                <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText" (change)="getData()">
             </div>
             <hr>
-            <h4 class="images-title">Cuadro de búsqueda</h4>
+            <!-- <h4 class="images-title">Cuadro de búsqueda</h4> -->
             <div id="searchDiv" class="row overflow" [ngStyle]="{'max-height': maxHeight + 'px'}">
-                
+                <app-modal [name]="name" [artists]="artists" [popularity]="popularity" [duration]="duration" [image]="image" [show]="show"></app-modal>
             </div>
         </div>
         <div class="col-9 m-0 p-4" style="overflow: scroll; max-height: 100vh;">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis architecto ducimus, illo rerum ratione
-            iusto exercitationem ipsam molestiae deleniti, temporibus asperiores praesentium consequatur porro doloribus
-            reprehenderit repudiandae delectus aperiam quam?
-            Autem, aliquid inventore quo eum laudantium ratione? Facilis doloremque commodi libero eius impedit
-            doloribus maiores rem quidem perspiciatis, earum nobis soluta est ipsa dicta assumenda pariatur, id quasi
-            voluptatum dignissimos.
-            Facilis eius rem nulla praesentium culpa quae ad, dolorem, illum esse voluptatum debitis dolorum assumenda
-            fugiat recusandae hic commodi! Sunt placeat quibusdam similique illo, consectetur delectus. Corporis sunt
-            nam eligendi?
-            Tenetur modi et debitis fugit expedita excepturi temporibus incidunt, itaque, adipisci perspiciatis
-            necessitatibus atque quod eius cupiditate voluptatum sed tempore asperiores! Ratione iusto, alias eaque esse
-            sapiente odio rerum quae.
-            Ducimus, magni quod nam eius illum laborum non laudantium nesciunt fugit, maiores hic dolores quis quo velit
-            minus dolore. Repellat recusandae dolores totam a dolor ipsa, cumque ipsam voluptates dolorum?
-            Tempora facere voluptatibus culpa molestiae amet sed, ullam ipsa et veritatis porro quis, sunt voluptatum
-            sint impedit laudantium architecto hic earum, dolore corrupti. Libero similique, dolorum quas omnis sapiente
-            nemo.
-            Nostrum ab, obcaecati, nisi delectus quis repellendus accusantium molestiae, minus adipisci quasi laudantium
-            vel dolor nam amet consequuntur veniam culpa nesciunt quibusdam. Labore aperiam id molestias aliquid quo
-            quia magnam.
-            Vitae earum deleniti, blanditiis unde fugiat nulla! Perferendis a reprehenderit corporis doloribus ab
-            repellendus reiciendis nisi aliquam eveniet possimus amet, architecto voluptates optio beatae. Quaerat
-            asperiores minus itaque totam possimus.
-            Neque asperiores voluptates distinctio sequi repudiandae autem, eum ipsam id atque dolore ipsa nulla
-            excepturi labore rem cupiditate facere eius? Omnis eos id qui architecto. Obcaecati nemo amet officiis
-            nostrum.
-            Ea vero quas, ut sed aspernatur a facere repudiandae, nobis magni excepturi alias aut, libero dignissimos
-            exercitationem necessitatibus corrupti aliquid id quam error doloribus omnis. Aliquam minus distinctio
-            blanditiis rerum.
+            <svg class="svg" viewBox="0 0 1000 1000"></svg>
         </div>
     </div>
 </div>
