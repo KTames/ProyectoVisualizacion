@@ -66,7 +66,7 @@ async function getSongs(artist, search, reload, token) {
     });
 }
 
-module.exports = function (axios, cheerio, puppeteer) {
+module.exports = function (axios, cheerio) {
     return {
         getGenre: function (genre, search, reloadToken, access_token, res, onError = console.error) {
             const url = "https://musicbrainz.org/tag/" + genre;
@@ -74,7 +74,7 @@ module.exports = function (axios, cheerio, puppeteer) {
             axios(url)
                 .then(async function (response) {
                     const html = response.data;
-                    const $ = cheerio.load(html)
+                    const $ = cheerio.load(html);
                     const statsTable = $('#content > ul, #content > h2');
                     const artistsArray = [];
 

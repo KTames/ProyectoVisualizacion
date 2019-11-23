@@ -10,6 +10,7 @@ const cheerio = require('cheerio');
 
 const search = require('./web/search')(request);
 const genres = require('./web/genres')(axios, cheerio);
+const artist = require('./web/artist')(axios, cheerio);
 
 const static_songs = require('./static/songs');
 
@@ -50,8 +51,8 @@ app.get('/static/search', function (req, res) {
     res.send(static_songs.getStatic());
 });
 
-app.get('/artist', function(req, res) {
-    
+app.get('/artist', function (req, res) {
+    artist.getArtist(req.query.q, res);
 });
 
 function getToken() {
