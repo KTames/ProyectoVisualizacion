@@ -60,6 +60,7 @@ export class GenresComponent implements OnInit {
 
   vote($event: boolean, genre: any) {
     genre.active = $event;
+    this.drawSunburst();
   }
 
   filterOptions($event: any) {
@@ -78,6 +79,7 @@ export class GenresComponent implements OnInit {
   // async run(svg, partition, focusOn, formatNumber, color, arc, middleArcLine, textFits) {
 
   drawSunburst() {
+    document.getElementById("svg").innerHTML = "";
     const width = window.innerWidth,
       height = window.innerHeight,
       maxRadius = (Math.min(width, height) / 2) - 5;
@@ -179,6 +181,10 @@ export class GenresComponent implements OnInit {
         .on('click', d => {
           d3.event.stopPropagation();
           focusOn(d);
+          // console.log(d);
+          if (d.data.link != undefined) {
+            window.location.href = "/artist?q=" + d.data.link;
+          }
         });
 
       newSlice.append('title')

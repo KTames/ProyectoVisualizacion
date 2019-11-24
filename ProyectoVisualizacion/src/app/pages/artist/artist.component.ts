@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { NodeService } from 'src/app/services/node.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-artist',
@@ -7,42 +8,36 @@ import { NodeService } from 'src/app/services/node.service';
   styleUrls: ['./artist.component.css']
 })
 export class ArtistComponent implements OnInit {
-  
+
   private artists = [];
   searchText: string = "";
+  private startingDraw: boolean = false
 
-  constructor(private nodeService: NodeService) { }
+  constructor(private nodeService: NodeService, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['q'] != undefined) {
+        this.searchText = params['q'];
+        this.startingDraw = true;
+      }
+    });
+  }
 
   ngOnInit() {
+    if (this.startingDraw)
+      this.getData();
   }
 
-  private maxHeight: number;
-  ngAfterContentInit() {
-    this.maxHeight = window.innerHeight - document.getElementById('searchDiv').getBoundingClientRect().top - 20;
-  }
+  nombreArtista:string = ""
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?) {
-    this.maxHeight = window.innerHeight - document.getElementById('searchDiv').getBoundingClientRect().top - 20;
-  }
   getData() {
-    document.getElementsByClassName("svg")[0].innerHTML = "";
+    // document.getElementsByClassName("svg")[0].innerHTML = "";
+    // console.log("Obteniendo los datos de " + this.searchText);
+    
     if (this.searchText == "")
       return
     this.nodeService.getSongs(this.searchText)
-      .subscribe((response) => {
-
-        const array = [];
-        for (let i = 0; i <= response.length; i++) {
-
-          if (response[i] != undefined)
-
-            array.push({
-              popularidad: response[i].popularity,
-              artistas: response[i].artists
-            });
-
-        }
+      .subscribe((response: any) => {
+        this.nombreArtista = response.name
       })
   }
 
