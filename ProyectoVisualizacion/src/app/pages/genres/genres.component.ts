@@ -86,7 +86,7 @@ export class GenresComponent implements OnInit {
     const y = d3.scaleSqrt()
       .range([maxRadius * .1, maxRadius]);
 
-    const color = d3.scaleOrdinal(d3.schemeCategory20);
+    const color = d3.scaleOrdinal(d3.schemeCategory10());
 
     const partition = d3.partition();
 
@@ -150,19 +150,15 @@ export class GenresComponent implements OnInit {
           })
         });
       };
-
-      for (genre of genresToSearch) {
-        console.log("Entered");
-        root.children.push(await getGenre(genre));
+      this.genresToSearch = [];
+      for( let i = 0; i <= this.genres.length ; i ++){
+        if(this.genres[i].active == true)
+          this.genresToSearch.push(this.genres[i].name.toLowerCase())
       }
-
-      console.log(root);
-
-      // llenar();
-
-      // d3.json('https://raw.githubusercontent.com/KennethSF/DV_FinalProyect/master/PopularGenders.json', (error,
-      //     root) => {
-      // if (error) throw error;
+      for (this.genre of this.genresToSearch) {
+        console.log("Entered");
+        root.children.push(await getGenre(this.genre));
+      }
 
       root = d3.hierarchy(root);
       console.log(root);

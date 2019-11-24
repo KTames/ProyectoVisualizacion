@@ -31,7 +31,7 @@ export class MusicComponent implements OnInit {
 
   }
 
-  
+
 
   private maxHeight: number;
   ngAfterContentInit() {
@@ -45,16 +45,16 @@ export class MusicComponent implements OnInit {
 
   getData() {
     document.getElementsByClassName("svg")[0].innerHTML = "";
-    if(this.searchText == "")
-    return 
+    if (this.searchText == "")
+      return
     this.nodeService.getSongs(this.searchText)
       .subscribe((response) => {
 
         const array = [];
         for (let i = 0; i <= response.length; i++) {
-          
+
           if (response[i] != undefined)
-          
+
             array.push({
               nombre: response[i].name,
               popularidad: response[i].popularity,
@@ -65,10 +65,11 @@ export class MusicComponent implements OnInit {
               tx: 0, ty: 0,      // relative to the translated center
               inGroup1: Math.random() >= 0.5  // random boolean
             });
-          
+
         }
 
         this.drawBubbles(array);
+        this.drawProgress();
 
       })
   }
@@ -112,14 +113,14 @@ export class MusicComponent implements OnInit {
       })
       .on("mousemove", function () { return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px"); })
       .on("mouseout", function () { return tooltip.style("visibility", "hidden"); })
-      .on("click", function(d) {
-          mainClass.artists = d.artistas;
-          mainClass.name = d.nombre;
-          mainClass.duration = d.duracion;
-          mainClass.popularity = d.popularidad;
-          mainClass.image = d.imagen
+      .on("click", function (d) {
+        mainClass.artists = d.artistas;
+        mainClass.name = d.nombre;
+        mainClass.duration = d.duracion;
+        mainClass.popularity = d.popularidad;
+        mainClass.image = d.imagen
 
-          mainClass.show = true;
+        mainClass.show = true;
       });
 
     var bubbles = d3.selectAll('.bubble');
@@ -130,5 +131,64 @@ export class MusicComponent implements OnInit {
         .attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
     }
+
+  }
+  drawProgress() {
+    
+    // set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+width = 960 - margin.left - margin.right,
+height = 500 - margin.top - margin.bottom;
+
+// set the ranges
+var x = d3.scaleBand()
+      .range([0, width])
+      .padding(0.1);
+var y = d3.scaleLinear()
+      .range([height, 0]);
+      
+// append the svg object to the body of the page
+// append a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("body").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", 
+      "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+d3.csv("assets/percentage.csv", function(error, data) {
+if (error) throw error;
+
+// format the data
+data.forEach(function(d) {
+d.sales = +d.sales;
+});
+
+// Scale the range of the data in the domains
+x.domain(data.map(function(d) { return d.salesperson; }));
+y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+
+// append the rectangles for the bar chart
+svg.selectAll(".bar")
+  .data(data)
+.enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", function(d) { return x(d.salesperson); })
+  .attr("width", x.bandwidth())
+  .attr("y", function(d) { return y(d.sales); })
+  .attr("height", d3.randomUniform(50, 90));
+
+// add the x Axis
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x));
+
+// add the y Axis
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+});
   }
 }
