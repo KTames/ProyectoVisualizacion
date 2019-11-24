@@ -23,6 +23,11 @@ export class MusicComponent implements OnInit {
   duration: string
   image: string
   show: boolean = false
+  radioMin = 20
+  radioMax = 60
+  sum: number = 0;
+  popMin = -1
+  popMax = 0
 
 
   ngOnInit() {
@@ -43,6 +48,14 @@ export class MusicComponent implements OnInit {
     this.maxHeight = window.innerHeight - document.getElementById('searchDiv').getBoundingClientRect().top - 20;
   }
 
+  getRadius(popularity, mainClass): number {
+    const popFixed = popularity - mainClass.popMin;
+
+    const porcentaje = popFixed / (mainClass.popMax - mainClass.popMin);
+
+    return ((mainClass.radioMax - mainClass.radioMin) * porcentaje + mainClass.radioMin);
+  }
+
   getData() {
     document.getElementsByClassName("svg")[0].innerHTML = "";
     if (this.searchText == "")
@@ -53,20 +66,26 @@ export class MusicComponent implements OnInit {
         const array = [];
         for (let i = 0; i <= response.length; i++) {
 
-          if (response[i] != undefined)
-
+          if (response[i] != undefined) {
+            if (this.popMin == -1 || response[i].popularity > this.popMin)
+              this.popMin = response[i].popularity;
+            if (response[i].popularity < this.popMax)
+              this.popMax = response[i].popularity;
             array.push({
               nombre: response[i].name,
               popularidad: response[i].popularity,
               artistas: response[i].artists,
               duracion: response[i].duration,
               imagen: response[i].image,
-              r: response[i].popularity / 2,
               tx: 0, ty: 0,      // relative to the translated center
               inGroup1: Math.random() >= 0.5  // random boolean
             });
+          }
 
         }
+
+        for (let item of array)
+          item['r'] = this.getRadius(item['popularidad'], this);
 
         this.drawBubbles(array);
         this.drawProgress();
@@ -78,7 +97,7 @@ export class MusicComponent implements OnInit {
 
     var width = 960, height = 960;
 
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
+    var color = d3.scaleOrdinal(d3.schemeBlues[9]);
 
     var tooltip = d3.select("body")
       .append("div")
@@ -89,7 +108,7 @@ export class MusicComponent implements OnInit {
 
     var simulation = d3.forceSimulation<any>(nodes)
       .velocityDecay(0.4)
-      .force("collide", d3.forceCollide<any>().radius(function (d) { return d.r + 0.9; }).iterations(2))
+      .force("collide", d3.forceCollide<any>().radius(function (d) { return d.r + 5; }).iterations(2))
       .on("tick", ticked);
     simulation
       .force("x", d3.forceX(0).strength(0.009))
@@ -104,7 +123,9 @@ export class MusicComponent implements OnInit {
       .data<any>(nodes, function (d) { return d.id; })
       .enter().append('circle')
       .classed('bubble', true)
-      .attr('r', function (d) { return d.r })
+      .attr('r', function (d) {
+        return mainClass.getRadius(d.popularidad, mainClass)
+      })
       .attr("fill", function (d, i) { return color(i); })
       .attr('stroke', '#333')
 
@@ -123,10 +144,10 @@ export class MusicComponent implements OnInit {
         mainClass.show = true;
       })
       .call(d3.drag()
-                  .on("start", dragstarted)
-                  .on("drag", dragged)
-                  .on("end", dragended)
-                  );
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended)
+      );
 
     var bubbles = d3.selectAll('.bubble');
     bubbles.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
@@ -139,18 +160,18 @@ export class MusicComponent implements OnInit {
     function dragsubject() {
       return simulation.find(d3.event.x, d3.event.y, function (d) { return d.r });
     }
-    
+
     function dragstarted() {
       if (!d3.event.active) simulation.alphaTarget(1).restart();
       d3.event.subject.fx = d3.event.subject.x;
       d3.event.subject.fy = d3.event.subject.y;
     }
-    
+
     function dragged() {
       d3.event.subject.fx = d3.event.x;
       d3.event.subject.fy = d3.event.y;
     }
-    
+
     function dragended() {
       if (!d3.event.active) simulation.alphaTarget(0);
       d3.event.subject.fx = null;
@@ -163,8 +184,8 @@ export class MusicComponent implements OnInit {
 
     // set the dimensions and margins of the graph
     var margin = { top: 5, right: 5, bottom: 5, left: 5 },
-      width = 50 - margin.left - margin.right,
-      height = 50 - margin.top - margin.bottom;
+      width = 120 - margin.left - margin.right,
+      height = 120 - margin.top - margin.bottom;
 
     // set the ranges
     var x = d3.scaleBand()
@@ -176,26 +197,17 @@ export class MusicComponent implements OnInit {
     // append the svg object to the body of the page
     // append a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select(".svgR")
+    var svg = d3.select(".svg")
+      .append("g")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
-      .append("g")
       .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    // get the data
-    d3.csvParse("assets/percentage.csv", function (error, data) {
-      if (error) throw error;
-      console.log(data)
-
-      // format the data
-      data.forEach(function (d) {
-        d.sales = +d.sales;
-      });
-
+      const data = [{salesperson: "Popularidad", sales: 100}]
       // Scale the range of the data in the domains
       x.domain(data.map(function (d) { return d.salesperson; }));
-      y.domain([0, d3.max(data, function (d) { return d.sales; })]);
+      y.domain([0, d3.min(data, function (d) { return d.sales; })]);
 
       // append the rectangles for the bar chart
       svg.selectAll(".bar")
@@ -205,7 +217,7 @@ export class MusicComponent implements OnInit {
         .attr("x", function (d) { return x(d.salesperson); })
         .attr("width", x.bandwidth())
         .attr("y", function (d) { return y(d.sales); })
-        .attr("height", d3.randomUniform(50, 90));
+        .attr("height", d3.randomUniform(20, 90));
 
       // add the x Axis
       svg.append("g")
@@ -216,6 +228,6 @@ export class MusicComponent implements OnInit {
       svg.append("g")
         .call(d3.axisLeft(y));
 
-    });
+    // });
   }
 }

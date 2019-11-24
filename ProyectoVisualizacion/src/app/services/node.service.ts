@@ -25,4 +25,11 @@ export class NodeService {
       }
     }) as Observable<{nombre: string, popularity: number, children: [{nombre: string, link: string, popularity: number, children: [{nombre: string, size: number}]}]}>;
   }
+  public getArtist(query: string){
+    return this.httpClient.get("http://localhost:9999/artist", {
+      params: {
+        'q': query
+      }
+    }) as Observable<[{area:[string],name:string, }]>;
+  }
 }
