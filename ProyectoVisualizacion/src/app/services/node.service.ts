@@ -30,6 +30,6 @@ export class NodeService {
       params: {
         'q': query
       }
-    }) as Observable<[{area:[string],name:string, }]>;
+    }) as Observable<[{area:string,type:string, rating:string, link: string, albums: [{year: number, releases: number}]}]>;
   }
 }
