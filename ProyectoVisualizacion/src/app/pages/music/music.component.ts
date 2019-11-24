@@ -78,6 +78,8 @@ export class MusicComponent implements OnInit {
 
     var width = 960, height = 960;
 
+    var color = d3.scaleOrdinal(d3.schemeCategory10);
+
     var tooltip = d3.select("body")
       .append("div")
       .style("position", "absolute")
@@ -86,12 +88,12 @@ export class MusicComponent implements OnInit {
 
 
     var simulation = d3.forceSimulation<any>(nodes)
-      .velocityDecay(0.2)
+      .velocityDecay(0.4)
       .force("collide", d3.forceCollide<any>().radius(function (d) { return d.r + 0.9; }).iterations(2))
       .on("tick", ticked);
     simulation
-      .force("x", d3.forceX(0).strength(0.006))
-      .force("y", d3.forceY(0).strength(0.006));
+      .force("x", d3.forceX(0).strength(0.009))
+      .force("y", d3.forceY(0).strength(0.009));
     // Create our SVG context
     var svg = d3.select('.svg')
       .attr('width', width)
@@ -103,9 +105,7 @@ export class MusicComponent implements OnInit {
       .enter().append('circle')
       .classed('bubble', true)
       .attr('r', function (d) { return d.r })
-      .attr("fill", function () {
-        return "hsl(" + Math.random() * 360 + ",60%,50%)";
-      })
+      .attr("fill", function (d, i) { return color(i); })
       .attr('stroke', '#333')
 
       .on("mouseover", function (d) {
@@ -121,7 +121,12 @@ export class MusicComponent implements OnInit {
         mainClass.image = d.imagen
 
         mainClass.show = true;
-      });
+      })
+      .call(d3.drag()
+                  .on("start", dragstarted)
+                  .on("drag", dragged)
+                  .on("end", dragended)
+                  );
 
     var bubbles = d3.selectAll('.bubble');
     bubbles.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
@@ -131,64 +136,86 @@ export class MusicComponent implements OnInit {
         .attr("cx", function (d: any) { return d.x; })
         .attr("cy", function (d: any) { return d.y; });
     }
-
-  }
-  drawProgress() {
+    function dragsubject() {
+      return simulation.find(d3.event.x, d3.event.y, function (d) { return d.r });
+    }
     
-    // set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-width = 960 - margin.left - margin.right,
-height = 500 - margin.top - margin.bottom;
+    function dragstarted() {
+      if (!d3.event.active) simulation.alphaTarget(1).restart();
+      d3.event.subject.fx = d3.event.subject.x;
+      d3.event.subject.fy = d3.event.subject.y;
+    }
+    
+    function dragged() {
+      d3.event.subject.fx = d3.event.x;
+      d3.event.subject.fy = d3.event.y;
+    }
+    
+    function dragended() {
+      if (!d3.event.active) simulation.alphaTarget(0);
+      d3.event.subject.fx = null;
+      d3.event.subject.fy = null;
+    }
+  }
 
-// set the ranges
-var x = d3.scaleBand()
+
+  drawProgress() {
+
+    // set the dimensions and margins of the graph
+    var margin = { top: 5, right: 5, bottom: 5, left: 5 },
+      width = 50 - margin.left - margin.right,
+      height = 50 - margin.top - margin.bottom;
+
+    // set the ranges
+    var x = d3.scaleBand()
       .range([0, width])
       .padding(0.1);
-var y = d3.scaleLinear()
+    var y = d3.scaleLinear()
       .range([height, 0]);
-      
-// append the svg object to the body of the page
-// append a 'group' element to 'svg'
-// moves the 'group' element to the top left margin
-var svg = d3.select("body").append("svg")
-.attr("width", width + margin.left + margin.right)
-.attr("height", height + margin.top + margin.bottom)
-.append("g")
-.attr("transform", 
-      "translate(" + margin.left + "," + margin.top + ")");
 
-// get the data
-d3.csv("assets/percentage.csv", function(error, data) {
-if (error) throw error;
+    // append the svg object to the body of the page
+    // append a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    var svg = d3.select(".svgR")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
-// format the data
-data.forEach(function(d) {
-d.sales = +d.sales;
-});
+    // get the data
+    d3.csvParse("assets/percentage.csv", function (error, data) {
+      if (error) throw error;
+      console.log(data)
 
-// Scale the range of the data in the domains
-x.domain(data.map(function(d) { return d.salesperson; }));
-y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+      // format the data
+      data.forEach(function (d) {
+        d.sales = +d.sales;
+      });
 
-// append the rectangles for the bar chart
-svg.selectAll(".bar")
-  .data(data)
-.enter().append("rect")
-  .attr("class", "bar")
-  .attr("x", function(d) { return x(d.salesperson); })
-  .attr("width", x.bandwidth())
-  .attr("y", function(d) { return y(d.sales); })
-  .attr("height", d3.randomUniform(50, 90));
+      // Scale the range of the data in the domains
+      x.domain(data.map(function (d) { return d.salesperson; }));
+      y.domain([0, d3.max(data, function (d) { return d.sales; })]);
 
-// add the x Axis
-svg.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x));
+      // append the rectangles for the bar chart
+      svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return x(d.salesperson); })
+        .attr("width", x.bandwidth())
+        .attr("y", function (d) { return y(d.sales); })
+        .attr("height", d3.randomUniform(50, 90));
 
-// add the y Axis
-svg.append("g")
-  .call(d3.axisLeft(y));
+      // add the x Axis
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
 
-});
+      // add the y Axis
+      svg.append("g")
+        .call(d3.axisLeft(y));
+
+    });
   }
 }

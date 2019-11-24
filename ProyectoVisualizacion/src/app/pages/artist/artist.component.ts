@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { NodeService } from 'src/app/services/node.service';
 
 @Component({
   selector: 'app-artist',
@@ -8,8 +9,9 @@ import { Component, OnInit, HostListener } from '@angular/core';
 export class ArtistComponent implements OnInit {
   
   private artists = [];
+  searchText: string = "";
 
-  constructor() { }
+  constructor(private nodeService: NodeService) { }
 
   ngOnInit() {
   }
@@ -22,6 +24,26 @@ export class ArtistComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
     this.maxHeight = window.innerHeight - document.getElementById('searchDiv').getBoundingClientRect().top - 20;
+  }
+  getData() {
+    document.getElementsByClassName("svg")[0].innerHTML = "";
+    if (this.searchText == "")
+      return
+    this.nodeService.getSongs(this.searchText)
+      .subscribe((response) => {
+
+        const array = [];
+        for (let i = 0; i <= response.length; i++) {
+
+          if (response[i] != undefined)
+
+            array.push({
+              popularidad: response[i].popularity,
+              artistas: response[i].artists
+            });
+
+        }
+      })
   }
 
 }
