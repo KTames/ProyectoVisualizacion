@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as d3 from 'd3';
+import { NgControlStatusGroup } from '@angular/forms';
+import { NodeService } from 'src/app/services/node.service';
 
 @Component({
   selector: 'app-genres',
@@ -9,8 +11,8 @@ import * as d3 from 'd3';
 export class GenresComponent implements OnInit {
 
   private genres = [
-    { name: "Rock", link: "assets/img/rock.jpg", active: false },
-    { name: "Metal", link: "assets/img/metal.jpg", active: false },
+    { name: "Rock", link: "assets/img/rock.jpg", active: true },
+    { name: "Metal", link: "assets/img/metal.jpg", active: true },
     { name: "Pop", link: "assets/img/pop.webp", active: false },
     { name: "Reggaeton", link: "assets/img/reggaeton.jpg", active: false },
     { name: "Indie", link: "assets/img/indie.jpg", active: false },
@@ -19,13 +21,13 @@ export class GenresComponent implements OnInit {
     { name: "Folk", link: "assets/img/folk.jpg", active: false },
   ];
 
-  public genresToSearch : [];
+  public genresToSearch = [];
 
   private originalShowGenres = [];
   private showGenres = [];
   private maxHeight: number;
 
-  constructor() { }
+  constructor(private nodeService: NodeService) { }
 
   ngOnInit() {
     this.genres = this.genres.sort((a, b) => {
@@ -48,6 +50,7 @@ export class GenresComponent implements OnInit {
 
   ngAfterContentInit() {
     this.maxHeight = window.innerHeight - document.getElementById('searchDiv').getBoundingClientRect().top - 20;
+    this.drawSunburst();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -72,6 +75,8 @@ export class GenresComponent implements OnInit {
     }
   }
 
+  // async run(svg, partition, focusOn, formatNumber, color, arc, middleArcLine, textFits) {
+
   drawSunburst() {
     const width = window.innerWidth,
       height = window.innerHeight,
@@ -86,7 +91,7 @@ export class GenresComponent implements OnInit {
     const y = d3.scaleSqrt()
       .range([maxRadius * .1, maxRadius]);
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10());
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const partition = d3.partition();
 
@@ -122,46 +127,45 @@ export class GenresComponent implements OnInit {
       return d.data.nombre.length * CHAR_SPACE < perimeter;
     };
 
-    const svg = d3.select('body').append('svg')
-      .style('width', '100vw')
-      .style('height', '100vh')
+    const svg = d3.select('svg')
+      // .style('width', '100vw')
+      // .style('height', '100vh')
       .attr('viewBox', `${-width / 2} ${-height / 2} ${width} ${height}`)
       .on('click', () => focusOn()); // Reset zoom on canvas click
 
-    async function run() {
+    // const this = this;
 
-      
-      let root = {
+    const run = async () => {
+      const nodeService = this.nodeService;
+
+      let root: any = {
         'nombre': 'Comparación de géneros',
         'children': []
       };
-
       const getGenre = function (genre) {
         return new Promise((resolve, reject) => {
-
-          const url = 'http://localhost:9999/genre?q=' + genre;
-          console.log("Url: " + url);
-
-          d3.json(url, (error, response) => {
-            if (error) reject(error);
-            else {
-              resolve(response);
-            }
-          })
+          nodeService.getGenre(genre).subscribe((response) => {
+            resolve(response);
+          });
         });
       };
+
       this.genresToSearch = [];
-      for( let i = 0; i <= this.genres.length ; i ++){
-        if(this.genres[i].active == true)
-          this.genresToSearch.push(this.genres[i].name.toLowerCase())
+
+      for (let g of this.genres) {
+        if (g.active == true)
+          this.genresToSearch.push(g.name.toLowerCase())
       }
-      for (this.genre of this.genresToSearch) {
-        console.log("Entered");
-        root.children.push(await getGenre(this.genre));
+      // console.log(this.genresToSearch);
+
+      for (let genre of this.genresToSearch) {
+        // console.log("Obteniendo");
+        const response = await getGenre(genre);
+        // console.log("Obtenido");
+        root.children.push(response);
       }
 
       root = d3.hierarchy(root);
-      console.log(root);
       root.sum(d => d.size);
 
       const slice = svg.selectAll('g.slice')
@@ -171,6 +175,7 @@ export class GenresComponent implements OnInit {
 
       const newSlice = slice.enter()
         .append('g').attr('class', 'slice')
+        // .attr('style', 'cursor: pointer')
         .on('click', d => {
           d3.event.stopPropagation();
           focusOn(d);
@@ -181,16 +186,24 @@ export class GenresComponent implements OnInit {
 
       newSlice.append('path')
         .attr('class', 'main-arc')
+        .style('stroke', '#fff')
+        .style('stroke-width', '1px')
         .style('fill', d => color((d.children ? d : d.parent).data.nombre))
+        .style('position', 'relative')
         .attr('d', arc);
 
       newSlice.append('path')
         .attr('class', 'hidden-arc')
+        .style('fill', 'none')
         .attr('id', (_, i) => `hiddenArc${i}`)
         .attr('d', middleArcLine);
 
       const text = newSlice.append('text')
-        .attr('display', d => textFits(d) ? null : 'none');
+        // .attr('display', (d) => textFits(d) ? null : 'none')
+        .attr('display', 'null')
+        .style('pointer-events', 'none')
+        .style('dominant-baseline', 'middle')
+        .style('text-anchor', 'middle');
 
       // Add white contour
       text.append('textPath')
@@ -200,15 +213,19 @@ export class GenresComponent implements OnInit {
         .style('fill', 'none')
         .style('stroke', '#fff')
         .style('stroke-width', 5)
-        .style('stroke-linejoin', 'round');
+        .style('stroke-linejoin', 'round')
+        .style('pointer-events', 'none')
+        .style('dominant-baseline', 'middle')
+        .style('text-anchor', 'middle');
 
       text.append('textPath')
         .attr('startOffset', '50%')
         .attr('xlink:href', (_, i) => `#hiddenArc${i}`)
-        .text(d => d.data.nombre);
-      // });
+        .text(d => d.data.nombre)
+        .style('pointer-events', 'none')
+        .style('dominant-baseline', 'middle')
+        .style('text-anchor', 'middle');
     }
-
     run();
 
     function focusOn(d = {
