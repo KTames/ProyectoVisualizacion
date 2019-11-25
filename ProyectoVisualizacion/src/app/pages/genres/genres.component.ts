@@ -11,8 +11,8 @@ import { NodeService } from 'src/app/services/node.service';
 export class GenresComponent implements OnInit {
 
   private genres = [
-    { name: "Rock", link: "assets/img/rock.jpg", active: true },
-    { name: "Metal", link: "assets/img/metal.jpg", active: true },
+    { name: "Rock", link: "assets/img/rock.jpg", active: false },
+    { name: "Metal", link: "assets/img/metal.jpg", active: false },
     { name: "Pop", link: "assets/img/pop.webp", active: false },
     { name: "Reggaeton", link: "assets/img/reggaeton.jpg", active: false },
     { name: "Indie", link: "assets/img/indie.jpg", active: false },
@@ -60,7 +60,6 @@ export class GenresComponent implements OnInit {
 
   vote($event: boolean, genre: any) {
     genre.active = $event;
-    this.drawSunburst();
   }
 
   filterOptions($event: any) {
@@ -158,7 +157,7 @@ export class GenresComponent implements OnInit {
         if (g.active == true)
           this.genresToSearch.push(g.name.toLowerCase())
       }
-      // console.log(this.genresToSearch);
+      console.log(this.genresToSearch);
 
       for (let genre of this.genresToSearch) {
         // console.log("Obteniendo");

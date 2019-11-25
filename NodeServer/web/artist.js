@@ -9,7 +9,7 @@ module.exports = function (axios, cheerio) {
                     // res.send({url: response.toString()});
                     const html = response.data;
                     const $ = cheerio.load(html);
-                    const area = $('.area').text();
+                    const area = $('.area .flag').first().text();
                     const tipo = $('.type').text();
                     const rating = $('.current-rating').first().text();
                     const link = $('.external_links a').first().attr('href');

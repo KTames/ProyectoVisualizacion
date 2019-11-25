@@ -70,18 +70,18 @@ export class ArtistComponent implements OnInit {
         this.sales2 = this.album[1]['releases']
         this.sales3 = this.album[2]['releases']
 
-
+        this.ShowMap(response.area);
       })
-
-    this.ShowMap()
   }
-  ShowMap(){
+  ShowMap(country: string){
 
     
     // The svg
+    document.getElementsByClassName("svg")[0].innerHTML = "";
     var svg = d3.select(".svg")
 
-    var country = "United States"
+
+    // var country = "United States"
 
     // Map and projection
     var projection = gp.geoNaturalEarth()
