@@ -177,7 +177,7 @@ export class GenresComponent implements OnInit {
 
       const newSlice = slice.enter()
         .append('g').attr('class', 'slice')
-        // .attr('style', 'cursor: pointer')
+        
         .on('click', d => {
           d3.event.stopPropagation();
           focusOn(d);

@@ -22,11 +22,12 @@ module.exports = function (axios, cheerio) {
                             releases: $(this).find('td').last().text()
                         });
                     });
+                    const name = $('.artistheader').find('bdi').first().text();
 
                     while (albums.length > 3)
                         albums.shift();
                     
-                    res.send({area: area, type: tipo, rating: rating, link: link, albums: albums});
+                    res.send({area: area, type: tipo, rating: rating, link: link, albums: albums, name : name});
 
             //         onSuccess({text: datos});
             //     }, function(error) {

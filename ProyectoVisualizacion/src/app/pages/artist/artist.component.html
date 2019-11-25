@@ -7,7 +7,7 @@
                     [ngStyle]="{'height.px': 20, 'width.px': 20}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                     style="line-height: 10px; align-self: center;">Volver a página inicial</span></h6>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Buscar"[(ngModel)]="searchText" (change)="getData()">
+                <input type="text" class="form-control" placeholder="Buscar" [(ngModel)]="searchText" (change)="getData()">
             </div>
             <hr>
             <h5>Introduzca un id para realizar la búsqueda...</h5>
@@ -15,28 +15,36 @@
         <div class="col-9 m-0 p-4 bg-gradient-secondary" style="overflow: scroll; max-height: 100vh;">
             <!-- <div class="miImagen"></div> -->
             <div class="card card-plain">
-                <img src="assets/img/avatar.png" alt="Avatar" style="width:20%; height:10%; margin-left: 10px; margin-top: 10px;" >
+                <img src="assets/img/avatar.png" alt="Avatar" style="width:20%; height:10%; margin-left: 10px; margin-top: 10px; margin-bottom: 10px;" >
                 <div class="container" >
                     <table class="card__table">
                         <tr>
                             <td><h4 class="card__title">Artista: </h4></td>
-                            <td><h5 class="card__title">{{nombreArtista}}</h5></td>
+                            <td><h4 class="card__title">{{nombre}}</h4></td>
                         </tr>
                         <tr>
                             <td><h4 class="card__title">Tipo: </h4></td>
-                            <td><h4 class="card__title"></h4></td>
+                            <td><h4 class="card__title"></h4>{{type}}</td>
                         </tr>
                         <tr>
                             <td><h4 class="card__title">Pais: </h4></td>
-                            <td><h4 class="card__title"></h4></td>
+                            <td><h4 class="card__title"></h4>{{area}}</td>
                         </tr>
                         <tr>
-                            <td><h4 class="card__title">Año: </h4></td>
-                            <td><h4 class="card__title"></h4></td>
+                            <td><h4 class="card__title">link: </h4></td>
+                            <td><h4 class="card__title"><a href="url">{{link}}</a></h4></td>
                         </tr>
                         <tr>
                             <td><h4 class="card__title">Ventas: </h4></td>
-                            <td><h4 class="card__title"></h4></td>
+                            <td><h4 class="card__title">${{sales3}} millones en el {{year3}}</h4></td>
+                        </tr>
+                        <tr>
+                            <td><h4 class="card__title">Ventas: </h4></td>
+                            <td><h4 class="card__title">${{sales2}} millones en el {{year2}}</h4></td>
+                        </tr>
+                        <tr>
+                            <td><h4 class="card__title">Ventas: </h4></td>
+                            <td><h4 class="card__title">${{sales}} millones en el {{year}}</h4></td>
                         </tr>
                     </table>
                 </div>

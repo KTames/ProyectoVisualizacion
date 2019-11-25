@@ -11,6 +11,7 @@ export class ArtistComponent implements OnInit {
 
   private artists = [];
   searchText: string = "";
+  name: string;
   private startingDraw: boolean = false
 
   constructor(private nodeService: NodeService, private activatedRoute: ActivatedRoute) {
@@ -27,18 +28,45 @@ export class ArtistComponent implements OnInit {
       this.getData();
   }
 
-  nombreArtista:string = ""
+  nombre: string;
+  area: string;
+  type: string;
+  rating: string;
+  link: string;
+  album: string[];
+  year : string;
+  year2 : string;
+  year3 : string;
+  
+  sales : string;
+  sales2 : string;
+  sales3 : string;
+
+
 
   getData() {
-    // document.getElementsByClassName("svg")[0].innerHTML = "";
-    // console.log("Obteniendo los datos de " + this.searchText);
     
     if (this.searchText == "")
-      return
-    this.nodeService.getSongs(this.searchText)
+      document.getElementsByClassName("card__table")[0].innerHTML = "";
+
+    this.nodeService.getArtist(this.searchText)
       .subscribe((response: any) => {
-        this.nombreArtista = response.name
-      })
+        this.nombre = response.name
+        this.area = response.area
+        this.type = response.type
+        this.rating = response.rating
+        this.link = response.link
+        this.album = response['albums']
+        this.year = this.album[0]['year']
+        this.year2 = this.album[1]['year']
+        this.year3 = this.album[2]['year']
+
+        this.sales = this.album[0]['releases']
+        this.sales2 = this.album[1]['releases']
+        this.sales3 = this.album[2]['releases']
+
+        
+    })
   }
 
 }
