@@ -182,6 +182,14 @@ export class MusicComponent implements OnInit {
 
   drawProgress() {
 
+    var percentage = d3.randomUniform(20, 90);
+
+    var tooltip = d3.select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden");
+
     // set the dimensions and margins of the graph
     var margin = { top: 5, right: 5, bottom: 5, left: 5 },
       width = 120 - margin.left - margin.right,
@@ -217,7 +225,13 @@ export class MusicComponent implements OnInit {
         .attr("x", function (d) { return x(d.salesperson); })
         .attr("width", x.bandwidth())
         .attr("y", function (d) { return y(d.sales); })
-        .attr("height", d3.randomUniform(20, 90));
+        .attr("height", percentage)
+        .attr("fill","#2297f7")
+        .on("mouseover", function (d) {
+          return tooltip.style("visibility", "visible").html("<b>" + percentage + "</b>");
+        })
+        .on("mousemove", function () { return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px"); })
+        .on("mouseout", function () { return tooltip.style("visibility", "hidden"); })
 
       // add the x Axis
       svg.append("g")

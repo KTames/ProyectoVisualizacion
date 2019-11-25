@@ -1,6 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { NodeService } from 'src/app/services/node.service';
 import { ActivatedRoute } from '@angular/router';
+import * as d3 from 'd3';
+import * as gp from 'd3-geo-projection';
 
 @Component({
   selector: 'app-artist',
@@ -26,6 +28,7 @@ export class ArtistComponent implements OnInit {
   ngOnInit() {
     if (this.startingDraw)
       this.getData();
+      // this.ShowMap();
   }
 
   nombre: string;
@@ -34,21 +37,23 @@ export class ArtistComponent implements OnInit {
   rating: string;
   link: string;
   album: string[];
-  year : string;
-  year2 : string;
-  year3 : string;
-  
-  sales : string;
-  sales2 : string;
-  sales3 : string;
+  year: string;
+  year2: string;
+  year3: string;
+
+  sales: string;
+  sales2: string;
+  sales3: string;
+
 
 
 
   getData() {
-    
+
     if (this.searchText == "")
       document.getElementsByClassName("card__table")[0].innerHTML = "";
 
+    
     this.nodeService.getArtist(this.searchText)
       .subscribe((response: any) => {
         this.nombre = response.name
@@ -65,8 +70,49 @@ export class ArtistComponent implements OnInit {
         this.sales2 = this.album[1]['releases']
         this.sales3 = this.album[2]['releases']
 
-        
+
+      })
+
+    this.ShowMap()
+  }
+  ShowMap(){
+
+    
+    // The svg
+    var svg = d3.select(".svg")
+
+    var country = "United States"
+
+    // Map and projection
+    var projection = gp.geoNaturalEarth()
+      .scale(400 / 1.3 / Math.PI)
+      .translate([400 / 2, 300 / 2])
+    // Load external data and boot
+    d3.json("assets/world.json").then(function(data){
+      // Draw the map
+      svg.append("g")
+        .selectAll("path")
+        .data(data.features)
+        .enter().append("path")
+        .attr("fill", "#409433")
+        .attr("d", d3.geoPath()
+          .projection(projection)
+        )
+        .style("stroke", "#fff")
+      // Filter data
+      data.features = data.features.filter(function (d) { return d.properties.name == country})
+
+      // Draw the map
+      svg.append("g")
+        .selectAll("path")
+        .data(data.features)
+        .enter()
+        .append("path")
+        .attr("fill", "#e65a00")
+        .attr("d", d3.geoPath()
+          .projection(projection)
+        )
+        .style("stroke", "none")
     })
   }
-
 }
