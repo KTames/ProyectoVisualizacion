@@ -86,7 +86,7 @@ export class ArtistComponent implements OnInit {
     // Map and projection
     var projection = gp.geoNaturalEarth()
       .scale(400 / 1.3 / Math.PI)
-      .translate([400 / 2, 300 / 2])
+      .translate([450 / 2, 350 / 2])
     // Load external data and boot
     d3.json("assets/world.json").then(function(data){
       // Draw the map
